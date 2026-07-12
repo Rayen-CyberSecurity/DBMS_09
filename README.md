@@ -67,7 +67,7 @@ Open that URL in your browser before writing a single line of code — the Swagg
 
 > **Screenshot 1:** Take a screenshot of the Swagger UI showing the list of available endpoints.
 >
-> `[insert screenshot]`
+> <img width="1255" height="952" alt="1" src="https://github.com/user-attachments/assets/6e3c5513-b458-4922-a4f9-79d57384e9ae" />
 
 ---
 
@@ -120,7 +120,8 @@ python3 --version
 
 > **Screenshot 2:** Take a screenshot showing the version outputs of `uv` and `python3`.
 >
-> `[insert screenshot]`
+> <img width="386" height="179" alt="2" src="https://github.com/user-attachments/assets/9c3acfc0-7ee7-4ab8-ae00-b7f7a6ae569f" />
+
 
 ---
 
@@ -179,7 +180,8 @@ uv run python -c "import requests; print('requests', requests.__version__)"
 
 > **Screenshot 3:** Take a screenshot showing the output confirming `requests` is available.
 >
-> `[insert screenshot]`
+> <img width="959" height="68" alt="3" src="https://github.com/user-attachments/assets/c721b7d0-ad2f-420b-9a17-4d549a591bf7" />
+
 
 ### Step 5 – Commit
 
@@ -287,7 +289,8 @@ for p in parts:
 
 > **Screenshot 4:** Take a screenshot showing the parts list printed in the Python REPL.
 >
-> `[insert screenshot]`
+> <img width="472" height="246" alt="4" src="https://github.com/user-attachments/assets/b48a31e1-88c5-4a19-a3da-c477aa1faadc" />
+
 
 Exit with `exit()`.
 
@@ -726,11 +729,12 @@ The connection dialog should appear. Enter the base URL (`http://128.140.85.215:
 
 > **Screenshot 5:** Take a screenshot of the connection dialog.
 >
-> `[insert screenshot]`
+> <img width="505" height="197" alt="5" src="https://github.com/user-attachments/assets/162f5518-7d34-4486-a088-795efceef00b" />
+
 
 > **Screenshot 6:** Take a screenshot of the main window showing the Parts tab populated with data from the live server.
 >
-> `[insert screenshot]`
+> <img width="829" height="642" alt="6" src="https://github.com/user-attachments/assets/0af33ae6-61af-4d45-8732-31bec3c9f019" />
 
 ### Step 4 – Commit
 
@@ -765,7 +769,8 @@ In the **Parts** tab, use the *Deliver parts* form:
 
 > **Screenshot 7:** Parts tab after delivering, showing updated stock values.
 >
-> `[insert screenshot]`
+> <img width="834" height="637" alt="7" src="https://github.com/user-attachments/assets/e457ffe6-bcf9-461b-9e7e-5949adce9d02" />
+
 
 ### Step 2 – Record a Production Run
 
@@ -777,7 +782,7 @@ In the **Products** tab, use the *Record production run* form:
 
 > **Screenshot 8:** Parts tab after production, showing reduced stock.
 >
-> `[insert screenshot]`
+> <img width="854" height="646" alt="8" src="https://github.com/user-attachments/assets/6c7cfe3f-b0bd-4385-b616-f447fa2cb5fa" />
 
 ### Step 3 – Check the Bill of Materials
 
@@ -785,7 +790,8 @@ Switch to the **Bill of Materials** tab. Enter Product ID `2` (Racing bike frame
 
 > **Screenshot 9:** Bill of Materials tab showing all five parts for the racing bike frame.
 >
-> `[insert screenshot]`
+> <img width="843" height="649" alt="9" src="https://github.com/user-attachments/assets/817b5cef-5421-4ff5-9889-048eee0c65ee" />
+
 
 ### Step 4 – Check Out a Finished Product
 
@@ -795,7 +801,8 @@ In the **Products** tab, use the *Check out from warehouse* form:
 
 > **Screenshot 10:** Products tab after checkout, showing `Total out` incremented by 1.
 >
-> `[insert screenshot]`
+> <img width="827" height="636" alt="10" src="https://github.com/user-attachments/assets/30b3a277-5231-4de8-b861-03eb80ea2415" />
+
 
 ### Step 5 – Trigger a Reorder Warning
 
@@ -803,7 +810,8 @@ Deliver only 1 steel tube (Part ID `1`) to bring stock very low, then produce 1 
 
 > **Screenshot 11:** Reorder Warnings tab showing at least one warning entry.
 >
-> `[insert screenshot]`
+> <img width="794" height="80" alt="11" src="https://github.com/user-attachments/assets/5054e2df-efb9-4c79-be3e-44f0cf37d063" />
+
 
 ### Step 6 – Stocktake Correction
 
@@ -862,7 +870,8 @@ fabrik-frontend
 
 > **Screenshot 12:** Terminal showing `ls dist/` with both distribution files.
 >
-> `[insert screenshot]`
+> <img width="654" height="178" alt="12" src="https://github.com/user-attachments/assets/fa2f0bd8-8e38-4913-a6c2-851e0c84b3a4" />
+
 
 ### Step 2 – Commit
 
@@ -933,7 +942,8 @@ On Windows: `fabrik-frontend.exe` instead.
 
 > **Screenshot 13:** The application running from the PyInstaller-built executable.
 >
-> `[insert screenshot]`
+> <img width="826" height="248" alt="13" src="https://github.com/user-attachments/assets/346eebc2-d489-425f-a5d4-3e920e2b6581" />
+
 
 > **Note:** PyInstaller builds are platform-specific. A build on Linux produces a Linux binary only. To distribute for all three platforms you need to build once on each operating system (or use a CI/CD pipeline).
 
@@ -977,7 +987,8 @@ fabrik-frontend
 
 > **Screenshot 14:** Terminal showing the `.deb` installation and the application launching from `/usr/bin/fabrik-frontend`.
 >
-> `[insert screenshot]`
+> <img width="796" height="338" alt="14" src="https://github.com/user-attachments/assets/63b663bb-6f7e-44dc-bd1e-c0ff243e2797" />
+
 
 ---
 
