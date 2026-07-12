@@ -31,6 +31,24 @@ After completing this exercise you will be able to:
 - What does `grab_set()` do in tkinter, and why is it used in a connection dialog?
 - What does PyInstaller bundle into the `dist/` directory, and why does the target machine not need Python installed?
 
+
+### Answers to the introductory questions
+
+**Why must the API URL not be hard-coded in the application source?**  
+The API address can change depending on the server, network, or user. Asking for it in the connection dialog allows the same program to connect to different servers without changing the source code.
+
+**What is `root.mainloop()`, and why does a GUI program normally not reach the line after it?**  
+`root.mainloop()` starts tkinter's event loop. It keeps waiting for events such as button clicks, keyboard input, and window actions. During normal operation, the loop continues until the main window is closed, so the next line is not executed before that.
+
+**Why is it bad practice to make HTTP requests directly inside a button callback without threading?**  
+Tkinter normally runs the interface in one main thread. A slow HTTP request blocks that thread, which can freeze the window and make it appear unresponsive. The request should run in a background thread, while GUI updates are sent back to the main thread with `after()`.
+
+**What does `grab_set()` do in tkinter, and why is it used in a connection dialog?**  
+`grab_set()` makes the dialog modal. The user cannot interact with the main window until the dialog is closed. This ensures that the API URL and key are confirmed before the rest of the application is used.
+
+**What does PyInstaller bundle into the `dist/` directory, and why does the target machine not need Python installed?**  
+PyInstaller bundles the application code, a Python interpreter, imported libraries, and supporting files. Since the interpreter and dependencies are included, the target machine does not need a separate Python installation.
+
 ---
 
 ## Background
@@ -175,11 +193,11 @@ git push -u origin main
 
 **Question 1.1:** `uv` creates a `uv.lock` file alongside `pyproject.toml`. What is the difference between the two files? Why should `uv.lock` be committed to version control?
 
-> *Your answer:*
+> **Answer:** `pyproject.toml` describes the project and lists the dependencies it is allowed to use, for example `requests>=2.32`. `uv.lock` records the exact versions that were resolved, including indirect dependencies such as `urllib3` and `certifi`. The lock file should be committed so that other developers and build systems install the same versions and get reproducible results.
 
 **Question 1.2:** `uv run` executes a command inside the project's virtual environment without you having to activate it manually. What problem does this solve compared to relying on the system-wide Python installation?
 
-> *Your answer:*
+> **Answer:** `uv run` automatically uses the project's virtual environment. This prevents the application from accidentally using a different system Python or incompatible globally installed packages. It also means that the command works without manually activating the virtual environment first.
 
 ---
 
@@ -285,11 +303,11 @@ git push
 
 **Question 2.1:** `r.raise_for_status()` raises an exception if the server returned a 4xx or 5xx status code. What would happen if this call were omitted and the server returned `409 Conflict`?
 
-> *Your answer:*
+> **Answer:** Without `r.raise_for_status()`, the program would not automatically treat `409 Conflict` as an error. It might continue, return the server's error JSON as if it were a successful result, or fail later when expected fields are missing. Calling `raise_for_status()` stops the normal flow immediately and lets the GUI show an error message.
 
 **Question 2.2:** `BASE_URL` and `HEADERS` are module-level variables set at runtime by the connection dialog. Why is this approach preferable to reading them from a configuration file on disk?
 
-> *Your answer:*
+> **Answer:** Setting `BASE_URL` and `HEADERS` at runtime makes it easy to connect to different servers without editing the source code. The API key also remains only in memory for the current session instead of being stored permanently in a file. This is simple and reduces the risk of accidentally committing the key to Git, although a dedicated secure credential store would be preferable for a production application.
 
 ---
 
@@ -376,7 +394,7 @@ root.mainloop()
 > Now add `top.grab_set()` after the `Toplevel` creation and repeat.
 > Describe the difference.
 
-> *Your answer:*
+> **Answer:** Without `grab_set()`, I could still click and interact with the main window while the dialog was open. After adding `grab_set()`, the main window no longer accepted input until the dialog was closed. This makes the connection dialog modal and ensures that the user finishes the connection step first.
 
 ### Step 3 – Commit
 
@@ -726,11 +744,11 @@ git push
 
 **Question 4.1:** The `_refresh_all()` method is called in `__init__` and makes three HTTP requests before `mainloop()` starts. In what scenario could this block the UI from appearing? How would you fix it?
 
-> *Your answer:*
+> **Answer:** If the server is offline, slow, or unreachable, the three HTTP requests can take several seconds because each one waits for a response or timeout. Since this happens before `mainloop()` starts, the main window may appear late or look frozen. A simple improvement is to schedule the refresh after startup with `root.after(...)`. A better solution is to perform the HTTP requests in a background thread and update the widgets safely through `after()`.
 
 **Question 4.2:** When `api.post_produktion()` raises an exception (e.g. `409 Conflict` due to insufficient parts), `messagebox.showerror` displays the error to the user. Look at the `requests` library documentation: what type of exception does `raise_for_status()` raise, and what attribute contains the server's response body?
 
-> *Your answer:*
+> **Answer:** `raise_for_status()` raises `requests.exceptions.HTTPError`. The exception's `response` attribute contains the server response. The response body can be read with `e.response.text`, or with `e.response.json()` when the server returned JSON.
 
 ---
 
@@ -860,11 +878,11 @@ git push
 
 **Question 6.1:** A `.whl` file still requires Python to be installed on the target machine. What problem does PyInstaller solve that `uv build` does not?
 
-> *Your answer:*
+> **Answer:** A wheel contains the Python package but still needs a compatible Python interpreter and its dependencies on the target machine. PyInstaller bundles the interpreter, the dependencies, and the application files into a standalone distribution. Therefore, the user can run the program without installing Python separately.
 
 **Question 6.2:** `[project.scripts]` defines `fabrik-frontend = "fabrik_frontend.__main__:main"`. Explain what happens when a user runs the command `fabrik-frontend` in their terminal after installing the wheel.
 
-> *Your answer:*
+> **Answer:** After the wheel is installed, the packaging system creates a command named `fabrik-frontend`. Running that command imports `fabrik_frontend.__main__` and calls its `main()` function. The `main()` function then creates the tkinter root window, opens the connection dialog, configures the API client, and starts the application.
 
 ---
 
@@ -1046,11 +1064,11 @@ git push
 
 **Question 8.1:** PyInstaller bundles a complete Python interpreter into `_internal/`. What is the typical size of a PyInstaller `--onedir` output compared to a minimal Python installation, and why is `--onedir` generally preferred over `--onefile` for desktop applications?
 
-> *Your answer:*
+> **Answer:** A PyInstaller `--onedir` build is usually tens of megabytes and can exceed 100 MB, depending on the Python version and included libraries. It is often similar in size to, or larger than, a minimal Python installation because it contains the interpreter and all required dependencies. `--onedir` is generally preferred for desktop applications because it starts faster, does not extract all files on every launch, is easier to debug, and is often less likely to trigger antivirus warnings than `--onefile`.
 
 **Question 8.2:** A `.deb` package installed via `dpkg -i` does not appear in the system package manager's update mechanism. Which tool and repository format would you use to distribute updates automatically to Debian/Ubuntu users?
 
-> *Your answer:*
+> **Answer:** I would distribute the package through an APT repository. An APT repository stores `.deb` files together with repository metadata such as `Packages`, `Release`, and signed `InRelease` files. Tools such as `aptly` or `reprepro` can create and manage this repository. Users can then receive updates through `apt update` and `apt upgrade`.
 
 ---
 
@@ -1059,22 +1077,22 @@ git push
 **Question A – Separation of Concerns:**  
 `api.py` contains all HTTP logic; `ui.py` contains all widget code; `__main__.py` wires them together. Name one concrete benefit this separation provides when you want to write automated tests for the API client.
 
-> *Your answer:*
+> **Answer:** The API client can be tested without starting tkinter. For example, a test can mock `requests.get()` or `requests.post()` and verify that `api.py` sends the correct URL, payload, and headers, and that it handles server errors correctly. No windows or button clicks are needed.
 
 **Question B – Event-Driven vs Sequential:**  
 A fellow student proposes using a `while True` loop in the main thread to poll the API every 5 seconds and update the display. Explain why this approach would break the tkinter application, and describe the correct alternative.
 
-> *Your answer:*
+> **Answer:** A `while True` loop in the main thread would block tkinter's event loop. The window would stop repainting, buttons would not respond, and the application would appear frozen. The correct alternative is to schedule repeated work with `root.after(5000, refresh_function)`. If the HTTP call itself may be slow, it should run in a background thread and the GUI should be updated through `after()`.
 
 **Question C – API Key in the Dialog:**  
 The connection dialog collects the API key at runtime and stores it in `api.HEADERS` for the session only. It is never written to disk. What are the security advantages of this approach compared to storing the key in a configuration file in the user's home directory?
 
-> *Your answer:*
+> **Answer:** Keeping the API key only in memory means it is not permanently stored in a readable file, cannot easily be copied from the user's home directory, and is less likely to be committed to Git or included in a backup. It also disappears when the application closes. This reduces exposure, although the key is still present in process memory while the application is running.
 
 **Question D – The Full Stack:**  
 You have now touched every layer of the system: PostgreSQL database → Docker Compose deployment → FastAPI REST layer → tkinter desktop client → native installer. Describe in one sentence the role of each layer, and explain which layer a new employee would need to understand to add a sixth part to the bill of materials without changing any other layer.
 
-> *Your answer:*
+> **Answer:** PostgreSQL stores the persistent data; Docker Compose starts and connects the required services; FastAPI exposes the data and business rules through REST endpoints; tkinter provides the desktop user interface; and the native installer installs and launches the application on the target operating system. To add a sixth part to a bill of materials without changing the other layers, a new part and its product-to-part relationship should be added in the database, because the API and GUI already display the returned records generically.
 
 ---
 
